@@ -1,15 +1,19 @@
 // behaviors.js
 
+let butterflyCount = 0;
+
 function addButterflies(x, y) {
-    setTimeout(() => createButterfly(x, y), getRandomTime(10, 20) * 1000);
-    setTimeout(() => createButterfly(x, y), getRandomTime(10, 20) * 1000);
+    const numButterflies = Math.floor(Math.random() * 2) + 1; // 1-2 butterflies per bush
+    for (let i = 0; i < numButterflies; i++) {
+        setTimeout(() => createButterfly(x, y), getRandomTime(10, 20) * 1000);
+    }
 }
 
 function createButterfly(targetX, targetY) {
     const playArea = document.getElementById('play-area');
     const butterflyElement = document.createElement('div');
     butterflyElement.textContent = EMOJIS.BUTTERFLY;
-    butterflyElement.classList.add('emoji');
+    butterflyElement.classList.add('emoji', 'butterfly');
     butterflyElement.style.position = 'absolute';
     butterflyElement.style.left = getRandomEdgePosition('x') + 'px';
     butterflyElement.style.top = getRandomEdgePosition('y') + 'px';
@@ -20,13 +24,12 @@ function createButterfly(targetX, targetY) {
 }
 
 function moveButterfly(butterfly, targetX, targetY) {
-    // Butterfly will fly in an arc around the target
     const interval = setInterval(() => {
         const currentX = parseFloat(butterfly.style.left);
         const currentY = parseFloat(butterfly.style.top);
 
         const angle = Math.random() * Math.PI * 2; // Random angle
-        const distance = Math.random() * 50 + 50; // Distance range
+        const distance = Math.random() * 20 + 30; // Smaller distance for smoother movement
 
         const newX = currentX + distance * Math.cos(angle);
         const newY = currentY + distance * Math.sin(angle);
@@ -40,12 +43,10 @@ function moveButterfly(butterfly, targetX, targetY) {
             clearInterval(interval);
             butterflyLand(butterfly, targetX, targetY);
         }
-
-    }, 100);
+    }, 300); // Slower interval for smoother, less jerky movement
 }
 
 function butterflyLand(butterfly, targetX, targetY) {
-    // Find the nearest bush
     const bushes = document.querySelectorAll('.emoji');
     let nearestBush = null;
     let minDistance = Infinity;
