@@ -12,10 +12,26 @@ document.addEventListener('DOMContentLoaded', () => {
         element.addEventListener('dragstart', (e) => {
             e.dataTransfer.setData('text/plain', item.emoji);
         });
+        element.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            e.dataTransfer = { setData: (type, data) => e.dataTransferData = data };
+            e.dataTransfer.setData('text/plain', item.emoji);
+        });
     });
 
     playArea.addEventListener('dragover', (e) => {
         e.preventDefault();
+    });
+
+    playArea.addEventListener('touchmove', (e) => {
+        e.preventDefault();
+        const touch = e.touches[0];
+        const element = document.elementFromPoint(touch.clientX, touch.clientY);
+        if (element && element.id === 'play-area') {
+            e.clientX = touch.clientX;
+            e.clientY = touch.clientY;
+            e.preventDefault();
+        }
     });
 
     playArea.addEventListener('drop', (e) => {
@@ -24,6 +40,20 @@ document.addEventListener('DOMContentLoaded', () => {
         const x = e.clientX - playArea.offsetLeft;
         const y = e.clientY - playArea.offsetTop;
         addEmojiToPlayArea(emoji, x, y);
+    });
+
+    playArea.addEventListener('touchend', (e) => {
+        e.preventDefault();
+        const touch = e.changedTouches[0];
+        const element = document.elementFromPoint(touch.clientX, touch.clientY);
+        if (element && element.id === 'play-area') {
+            e.clientX = touch.clientX;
+            e.clientY = touch.clientY;
+            const emoji = e.dataTransferData;
+            const x = e.clientX - playArea.offsetLeft;
+            const y = e.clientY - playArea.offsetTop;
+            addEmojiToPlayArea(emoji, x, y);
+        }
     });
 
     function addEmojiToPlayArea(emoji, x, y) {
