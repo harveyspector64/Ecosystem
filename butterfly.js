@@ -1,5 +1,7 @@
 // butterfly.js
 
+import { EMOJIS } from './constants.js';
+
 export function addButterflies(x, y, onButterflyLand) {
     const numButterflies = Math.floor(Math.random() * 2) + 1; // 1-2 butterflies per bush
     for (let i = 0; i < numButterflies; i++) {
