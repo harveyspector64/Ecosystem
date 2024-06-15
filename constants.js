@@ -9,6 +9,6 @@ const EMOJIS = {
 };
 
 const INITIAL_EMOJIS = [
-    { id: 'flowering-bush', emoji: 'images/bush.png' },
-    { id: 'tree', emoji: 'images/tree.png', disabled: true }
+    { id: 'flowering-bush', emoji: EMOJIS.BUSH },
+    { id: 'tree', emoji: EMOJIS.TREE, disabled: true }
 ];
