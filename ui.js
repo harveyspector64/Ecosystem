@@ -3,10 +3,12 @@
 import { addButterflies } from './butterfly.js';
 import { addBird } from './bird.js';
 import { EMOJIS, INITIAL_EMOJIS } from './constants.js';
+import { GameEngine } from './gameEngine.js';
 
 document.addEventListener('DOMContentLoaded', () => {
     const playArea = document.getElementById('play-area');
     const treeElement = document.getElementById('tree');
+    const gameEngine = new GameEngine();
     let butterflyLanded = false;
 
     INITIAL_EMOJIS.forEach(item => {
@@ -16,7 +18,7 @@ document.addEventListener('DOMContentLoaded', () => {
             element.setAttribute('draggable', 'false');
         }
         element.addEventListener('dragstart', (e) => {
-            e.dataTransfer.setData('text/plain', item.emoji);
+            e.dataTransfer.setData('text', item.emoji);
         });
     });
 
@@ -26,7 +28,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     playArea.addEventListener('drop', (e) => {
         e.preventDefault();
-        const emoji = e.dataTransfer.getData('text/plain');
+        const emoji = e.dataTransfer.getData('text');
         const x = e.clientX - playArea.offsetLeft;
         const y = e.clientY - playArea.offsetTop;
         addEmojiToPlayArea(emoji, x, y);
@@ -36,14 +38,16 @@ document.addEventListener('DOMContentLoaded', () => {
         if (emoji === EMOJIS.TREE && !butterflyLanded) {
             return;
         }
-        if (emoji === EMOJIS.BUSH && !limitPlanting('bush', 5)) {
+        if (emoji === EMOJIS.BUSH && !gameEngine.plantBush()) {
             return;
         }
-        if (emoji === EMOJIS.TREE && !limitPlanting('tree', 1)) {
+        if (emoji === EMOJIS.TREE && !gameEngine.plantTree()) {
             return;
         }
 
         const emojiElement = document.createElement('div');
+        emojiElement.textContent = emoji;
+
         if (emoji === EMOJIS.TREE) {
             emojiElement.classList.add('emoji', 'tree');
         } else if (emoji === EMOJIS.BUTTERFLY) {
@@ -55,6 +59,7 @@ document.addEventListener('DOMContentLoaded', () => {
         } else {
             emojiElement.classList.add('emoji');
         }
+        
         emojiElement.style.position = 'absolute';
         emojiElement.style.left = `${x}px`;
         emojiElement.style.top = `${y}px`;
@@ -75,10 +80,5 @@ document.addEventListener('DOMContentLoaded', () => {
     function butterflyLands() {
         butterflyLanded = true;
         unlockTree();
-    }
-
-    function limitPlanting(emoji, maxCount) {
-        const currentCount = document.querySelectorAll(`.emoji.${emoji}`).length;
-        return currentCount < maxCount;
     }
 });
