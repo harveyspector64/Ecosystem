@@ -4,8 +4,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const playArea = document.getElementById('play-area');
     const sidebar = document.getElementById('sidebar');
     let draggedEmoji = null;
-    let dragOffsetX = 0;
-    let dragOffsetY = 0;
     let activeEmoji = null;
 
     INITIAL_EMOJIS.forEach(item => {
@@ -24,18 +22,20 @@ document.addEventListener('DOMContentLoaded', () => {
         element.addEventListener('touchstart', (e) => {
             e.preventDefault();
             draggedEmoji = item.emoji;
-            activeEmoji = element.cloneNode(true);
+            activeEmoji = document.createElement('div');
+            activeEmoji.textContent = draggedEmoji;
+            activeEmoji.classList.add('emoji');
             activeEmoji.style.position = 'absolute';
-            activeEmoji.style.left = `${e.touches[0].clientX - sidebar.offsetLeft}px`;
-            activeEmoji.style.top = `${e.touches[0].clientY - sidebar.offsetTop}px`;
+            activeEmoji.style.left = `${e.touches[0].clientX}px`;
+            activeEmoji.style.top = `${e.touches[0].clientY}px`;
             document.body.appendChild(activeEmoji);
         });
 
         element.addEventListener('touchmove', (e) => {
             e.preventDefault();
             if (activeEmoji) {
-                activeEmoji.style.left = `${e.touches[0].clientX - dragOffsetX}px`;
-                activeEmoji.style.top = `${e.touches[0].clientY - dragOffsetY}px`;
+                activeEmoji.style.left = `${e.touches[0].clientX}px`;
+                activeEmoji.style.top = `${e.touches[0].clientY}px`;
             }
         });
 
