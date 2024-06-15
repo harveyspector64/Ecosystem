@@ -12,6 +12,8 @@ document.addEventListener('DOMContentLoaded', () => {
         element.addEventListener('dragstart', (e) => {
             e.dataTransfer.setData('text/plain', item.emoji);
         });
+
+        // Touch event for dragging
         element.addEventListener('touchstart', (e) => {
             e.preventDefault();
             e.dataTransfer = { setData: (type, data) => e.dataTransferData = data };
@@ -23,6 +25,7 @@ document.addEventListener('DOMContentLoaded', () => {
         e.preventDefault();
     });
 
+    // Touch move event to handle dragover equivalent
     playArea.addEventListener('touchmove', (e) => {
         e.preventDefault();
         const touch = e.touches[0];
@@ -42,6 +45,7 @@ document.addEventListener('DOMContentLoaded', () => {
         addEmojiToPlayArea(emoji, x, y);
     });
 
+    // Touch end event to handle drop equivalent
     playArea.addEventListener('touchend', (e) => {
         e.preventDefault();
         const touch = e.changedTouches[0];
