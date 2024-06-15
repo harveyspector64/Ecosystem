@@ -2,12 +2,13 @@
 
 import { addButterflies } from './butterfly.js';
 import { addBird } from './bird.js';
-import { addWorms } from './worm.js';
-import { EMOJIS } from './constants.js';
+import { EMOJIS, INITIAL_EMOJIS } from './constants.js';
+import { GameEngine } from './gameEngine.js';
 
 document.addEventListener('DOMContentLoaded', () => {
     const playArea = document.getElementById('play-area');
     const treeElement = document.getElementById('tree');
+    const gameEngine = new GameEngine();
     let butterflyLanded = false;
 
     INITIAL_EMOJIS.forEach(item => {
@@ -37,6 +38,13 @@ document.addEventListener('DOMContentLoaded', () => {
         if (emoji === EMOJIS.TREE && !butterflyLanded) {
             return;
         }
+        if (emoji === EMOJIS.BUSH && !gameEngine.plantBush()) {
+            return;
+        }
+        if (emoji === EMOJIS.TREE && !gameEngine.plantTree()) {
+            return;
+        }
+
         const emojiElement = document.createElement('div');
         if (emoji === EMOJIS.TREE) {
             emojiElement.classList.add('emoji', 'tree');
