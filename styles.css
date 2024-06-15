@@ -20,11 +20,20 @@ body {
 }
 
 .emoji {
-    font-size: 20px; /* Smaller size for emojis */
+    font-size: 20px; /* Keep size for flowering bushes */
     cursor: pointer;
     margin: 10px 0;
 }
 
 .disabled {
     color: #ccc;
+}
+
+.butterfly {
+    font-size: 15px; /* Smaller size for butterflies */
+    opacity: 0.7; /* Slightly transparent */
+}
+
+.tree {
+    font-size: 80px; /* Larger size for trees */
 }
