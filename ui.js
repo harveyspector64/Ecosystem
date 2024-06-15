@@ -18,7 +18,7 @@ document.addEventListener('DOMContentLoaded', () => {
             element.setAttribute('draggable', 'false');
         }
         element.addEventListener('dragstart', (e) => {
-            e.dataTransfer.setData('text', item.emoji);
+            e.dataTransfer.setData('text/plain', item.emoji);
         });
     });
 
@@ -28,7 +28,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     playArea.addEventListener('drop', (e) => {
         e.preventDefault();
-        const emoji = e.dataTransfer.getData('text');
+        const emoji = e.dataTransfer.getData('text/plain');
         const x = e.clientX - playArea.offsetLeft;
         const y = e.clientY - playArea.offsetTop;
         console.log('Drop event:', emoji, x, y); // Debugging
