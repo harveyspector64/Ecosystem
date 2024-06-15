@@ -11,13 +11,17 @@ document.addEventListener('DOMContentLoaded', () => {
     const gameEngine = new GameEngine();
     let butterflyLanded = false;
 
+    console.log('Initial setup started'); // Debugging
+
     INITIAL_EMOJIS.forEach(item => {
         const element = document.getElementById(item.id);
         if (item.disabled) {
             element.classList.add('disabled');
             element.setAttribute('draggable', 'false');
+            console.log(`Disabled emoji: ${item.id}`); // Debugging
         } else {
             element.setAttribute('draggable', 'true');
+            console.log(`Enabled draggable emoji: ${item.id}`); // Debugging
         }
         element.addEventListener('dragstart', (e) => {
             e.dataTransfer.setData('text/plain', item.emoji);
@@ -27,6 +31,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     playArea.addEventListener('dragover', (e) => {
         e.preventDefault();
+        console.log('Drag over play area'); // Debugging
     });
 
     playArea.addEventListener('drop', (e) => {
@@ -82,10 +87,13 @@ document.addEventListener('DOMContentLoaded', () => {
     function unlockTree() {
         treeElement.classList.remove('disabled');
         treeElement.setAttribute('draggable', 'true');
+        console.log('Tree unlocked'); // Debugging
     }
 
     function butterflyLands() {
         butterflyLanded = true;
         unlockTree();
     }
+
+    console.log('Initial setup completed'); // Debugging
 });
