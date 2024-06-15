@@ -1,8 +1,8 @@
 // behaviors.js
 
 function addButterflies(x, y) {
-    setTimeout(() => createButterfly(x, y), getRandomTime(10, 20));
-    setTimeout(() => createButterfly(x, y), getRandomTime(10, 20));
+    setTimeout(() => createButterfly(x, y), getRandomTime(10, 20) * 1000);
+    setTimeout(() => createButterfly(x, y), getRandomTime(10, 20) * 1000);
 }
 
 function createButterfly(targetX, targetY) {
@@ -15,35 +15,63 @@ function createButterfly(targetX, targetY) {
     butterflyElement.style.top = getRandomEdgePosition('y') + 'px';
     playArea.appendChild(butterflyElement);
 
+    butterflyElement.hunger = 100; // Initialize hunger bar
     moveButterfly(butterflyElement, targetX, targetY);
 }
 
 function moveButterfly(butterfly, targetX, targetY) {
-    // Placeholder for golden ratio flight path
-    // We'll implement a simple looping pattern for now
+    // Butterfly will fly in an arc around the target
     const interval = setInterval(() => {
         const currentX = parseFloat(butterfly.style.left);
         const currentY = parseFloat(butterfly.style.top);
 
-        const newX = currentX + (Math.random() - 0.5) * 10;
-        const newY = currentY + (Math.random() - 0.5) * 10;
+        const angle = Math.random() * Math.PI * 2; // Random angle
+        const distance = Math.random() * 50 + 50; // Distance range
+
+        const newX = currentX + distance * Math.cos(angle);
+        const newY = currentY + distance * Math.sin(angle);
 
         butterfly.style.left = `${newX}px`;
         butterfly.style.top = `${newY}px`;
 
-        const distanceToTarget = Math.sqrt((newX - targetX) ** 2 + (newY - targetY) ** 2);
-        if (distanceToTarget < 50) {
+        butterfly.hunger -= 1; // Decrease hunger over time
+
+        if (butterfly.hunger <= 0) {
             clearInterval(interval);
             butterflyLand(butterfly, targetX, targetY);
         }
+
     }, 100);
 }
 
 function butterflyLand(butterfly, targetX, targetY) {
-    setTimeout(() => {
-        // Move away again after landing
-        moveButterfly(butterfly, targetX, targetY);
-    }, getRandomTime(5, 10) * 1000);
+    // Find the nearest bush
+    const bushes = document.querySelectorAll('.emoji');
+    let nearestBush = null;
+    let minDistance = Infinity;
+
+    bushes.forEach(bush => {
+        if (bush.textContent === EMOJIS.BUSH) {
+            const bushX = parseFloat(bush.style.left);
+            const bushY = parseFloat(bush.style.top);
+            const distance = Math.sqrt((bushX - targetX) ** 2 + (bushY - targetY) ** 2);
+
+            if (distance < minDistance) {
+                minDistance = distance;
+                nearestBush = bush;
+            }
+        }
+    });
+
+    if (nearestBush) {
+        butterfly.style.left = nearestBush.style.left;
+        butterfly.style.top = nearestBush.style.top;
+
+        setTimeout(() => {
+            butterfly.hunger = 100; // Reset hunger
+            moveButterfly(butterfly, parseFloat(nearestBush.style.left), parseFloat(nearestBush.style.top));
+        }, getRandomTime(5, 10) * 1000);
+    }
 }
 
 function getRandomTime(min, max) {
