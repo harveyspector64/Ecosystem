@@ -1,6 +1,6 @@
 // bird.js
 
-export function addBird(x, y) {
+function addBird(x, y) {
     const playArea = document.getElementById('play-area');
     const birdElement = document.createElement('div');
     birdElement.textContent = EMOJIS.BIRD;
@@ -22,11 +22,13 @@ function moveBird(bird, targetX, targetY) {
         const currentX = parseFloat(bird.style.left);
         const currentY = parseFloat(bird.style.top);
 
-        const angle = Math.random() * Math.PI * 2; // Random angle
-        const distance = Math.random() * 50 + 50; // Random distance
+        // Golden ratio calculation
+        const phi = (1 + Math.sqrt(5)) / 2;
+        const angle = Math.random() * Math.PI * 2;
+        const distance = Math.random() * 50 + 50;
 
-        const newX = currentX + distance * Math.cos(angle);
-        const newY = currentY + distance * Math.sin(angle);
+        const newX = currentX + distance * Math.cos(angle) / phi;
+        const newY = currentY + distance * Math.sin(angle) / phi;
 
         bird.style.left = `${newX}px`;
         bird.style.top = `${newY}px`;
@@ -44,6 +46,15 @@ function moveBird(bird, targetX, targetY) {
     }, 500);
 }
 
+function getRandomEdgePosition(axis) {
+    const playArea = document.getElementById('play-area');
+    if (axis === 'x') {
+        return Math.random() > 0.5 ? 0 : playArea.clientWidth - 20; // Adjust 20 for margin
+    } else {
+        return Math.random() > 0.5 ? 0 : playArea.clientHeight - 20;
+    }
+}
+
 function addBirdToPanel() {
     const birdElement = document.createElement('div');
     birdElement.id = 'bird';
@@ -56,13 +67,4 @@ function addBirdToPanel() {
 
     const sidebar = document.getElementById('sidebar');
     sidebar.appendChild(birdElement);
-}
-
-function getRandomEdgePosition(axis) {
-    const playArea = document.getElementById('play-area');
-    if (axis === 'x') {
-        return Math.random() > 0.5 ? 0 : playArea.clientWidth - 20; // Adjust 20 for margin
-    } else {
-        return Math.random() > 0.5 ? 0 : playArea.clientHeight - 20;
-    }
 }
