@@ -30,6 +30,22 @@ function addBird(x, y) {
 
     // Implement bird behavior here
     console.log(`Bird placed at: (${x}, ${y})`);
+
+    // Trigger worms to appear
+    setTimeout(() => addWorms(x, y), 2000);
+}
+
+function addWorms(x, y) {
+    const playArea = document.getElementById('play-area');
+    const wormElement = document.createElement('div');
+    wormElement.textContent = EMOJIS.WORM;
+    wormElement.classList.add('emoji');
+    wormElement.style.position = 'absolute';
+    wormElement.style.left = `${x + getRandomOffset()}px`;
+    wormElement.style.top = `${y + getRandomOffset()}px`;
+    playArea.appendChild(wormElement);
+
+    console.log(`Worm placed at: (${x + getRandomOffset()}, ${y + getRandomOffset()})`);
 }
 
 function getRandomOffset() {
