@@ -1,0 +1,30 @@
+body {
+    display: flex;
+    margin: 0;
+    height: 100vh;
+    font-family: Arial, sans-serif;
+}
+
+#sidebar {
+    width: 150px;
+    background-color: #f0f0f0;
+    padding: 10px;
+    border-right: 1px solid #ccc;
+}
+
+#play-area {
+    flex: 1;
+    background-color: #ffffff;
+    position: relative;
+    overflow: hidden;
+}
+
+.emoji {
+    font-size: 40px;
+    cursor: pointer;
+    margin: 10px 0;
+}
+
+.disabled {
+    color: #ccc;
+}
