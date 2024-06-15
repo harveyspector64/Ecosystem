@@ -31,17 +31,22 @@ document.addEventListener('DOMContentLoaded', () => {
         const emoji = e.dataTransfer.getData('text');
         const x = e.clientX - playArea.offsetLeft;
         const y = e.clientY - playArea.offsetTop;
+        console.log('Drop event:', emoji, x, y); // Debugging
         addEmojiToPlayArea(emoji, x, y);
     });
 
     function addEmojiToPlayArea(emoji, x, y) {
+        console.log('Adding emoji:', emoji, 'at position:', x, y); // Debugging
         if (emoji === EMOJIS.TREE && !butterflyLanded) {
+            console.log('Tree is locked'); // Debugging
             return;
         }
         if (emoji === EMOJIS.BUSH && !gameEngine.plantBush()) {
+            console.log('Max bushes reached'); // Debugging
             return;
         }
         if (emoji === EMOJIS.TREE && !gameEngine.plantTree()) {
+            console.log('Max trees reached'); // Debugging
             return;
         }
 
@@ -59,7 +64,7 @@ document.addEventListener('DOMContentLoaded', () => {
         } else {
             emojiElement.classList.add('emoji');
         }
-        
+
         emojiElement.style.position = 'absolute';
         emojiElement.style.left = `${x}px`;
         emojiElement.style.top = `${y}px`;
