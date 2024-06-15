@@ -1,15 +1,13 @@
 // butterfly.js
 
-import { EMOJIS } from './constants.js';
-
-export function addButterflies(x, y, onButterflyLand) {
+function addButterflies(x, y) {
     const numButterflies = Math.floor(Math.random() * 2) + 1; // 1-2 butterflies per bush
     for (let i = 0; i < numButterflies; i++) {
-        setTimeout(() => createButterfly(x, y, onButterflyLand), getRandomTime(10, 20) * 1000);
+        setTimeout(() => createButterfly(x, y), getRandomTime(10, 20) * 1000);
     }
 }
 
-function createButterfly(targetX, targetY, onButterflyLand) {
+function createButterfly(targetX, targetY) {
     const playArea = document.getElementById('play-area');
     const butterflyElement = document.createElement('div');
     butterflyElement.textContent = EMOJIS.BUTTERFLY;
@@ -20,10 +18,10 @@ function createButterfly(targetX, targetY, onButterflyLand) {
     playArea.appendChild(butterflyElement);
 
     butterflyElement.hunger = 100; // Initialize hunger bar
-    moveButterfly(butterflyElement, targetX, targetY, onButterflyLand);
+    moveButterfly(butterflyElement, targetX, targetY);
 }
 
-function moveButterfly(butterfly, targetX, targetY, onButterflyLand) {
+function moveButterfly(butterfly, targetX, targetY) {
     const interval = setInterval(() => {
         const currentX = parseFloat(butterfly.style.left);
         const currentY = parseFloat(butterfly.style.top);
@@ -41,12 +39,12 @@ function moveButterfly(butterfly, targetX, targetY, onButterflyLand) {
 
         if (butterfly.hunger <= 0) {
             clearInterval(interval);
-            butterflyLand(butterfly, targetX, targetY, onButterflyLand);
+            butterflyLand(butterfly, targetX, targetY);
         }
     }, 300); // Slower interval for smoother, less jerky movement
 }
 
-function butterflyLand(butterfly, targetX, targetY, onButterflyLand) {
+function butterflyLand(butterfly, targetX, targetY) {
     const bushes = document.querySelectorAll('.emoji');
     let nearestBush = null;
     let minDistance = Infinity;
@@ -70,10 +68,11 @@ function butterflyLand(butterfly, targetX, targetY, onButterflyLand) {
 
         setTimeout(() => {
             butterfly.hunger = 100; // Reset hunger
-            moveButterfly(butterfly, parseFloat(nearestBush.style.left), parseFloat(nearestBush.style.top), onButterflyLand);
+            moveButterfly(butterfly, parseFloat(nearestBush.style.left), parseFloat(nearestBush.style.top));
+            
+            // Unlock the tree when the first butterfly lands on the bush
+            unlockTree();
         }, getRandomTime(5, 10) * 1000);
-
-        onButterflyLand();
     }
 }
 
