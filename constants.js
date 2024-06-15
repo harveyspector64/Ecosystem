@@ -5,10 +5,10 @@ const EMOJIS = {
     TREE: '🌳',
     BUTTERFLY: '🦋',
     BIRD: '🐦',
-    WORM: '🐛'  // Using caterpillar emoji to represent worms
+    WORM: '🐛'
 };
 
 const INITIAL_EMOJIS = [
-    { id: 'flowering-bush', emoji: EMOJIS.BUSH },
-    { id: 'tree', emoji: EMOJIS.TREE, disabled: true }
+    { id: 'flowering-bush', emoji: 'images/bush.png' },
+    { id: 'tree', emoji: 'images/tree.png', disabled: true }
 ];
