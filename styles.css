@@ -20,7 +20,7 @@ body {
 }
 
 .emoji {
-    font-size: 40px;
+    font-size: 20px; /* Smaller size for emojis */
     cursor: pointer;
     margin: 10px 0;
 }
