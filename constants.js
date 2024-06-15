@@ -1,6 +1,6 @@
 // constants.js
 
-export const EMOJIS = {
+const EMOJIS = {
     BUSH: '🌺',
     TREE: '🌳',
     BUTTERFLY: '🦋',
@@ -8,7 +8,7 @@ export const EMOJIS = {
     WORM: '🐛'  // Using caterpillar emoji to represent worms
 };
 
-export const INITIAL_EMOJIS = [
+const INITIAL_EMOJIS = [
     { id: 'flowering-bush', emoji: EMOJIS.BUSH },
     { id: 'tree', emoji: EMOJIS.TREE, disabled: true }
 ];
