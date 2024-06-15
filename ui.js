@@ -1,5 +1,9 @@
 // ui.js
 
+import { addButterflies } from './butterfly.js';
+import { addBird } from './bird.js';
+import { EMOJIS, INITIAL_EMOJIS } from './constants.js';
+
 document.addEventListener('DOMContentLoaded', () => {
     const playArea = document.getElementById('play-area');
     const treeElement = document.getElementById('tree');
@@ -32,6 +36,13 @@ document.addEventListener('DOMContentLoaded', () => {
         if (emoji === EMOJIS.TREE && !butterflyLanded) {
             return;
         }
+        if (emoji === EMOJIS.BUSH && !limitPlanting('bush', 5)) {
+            return;
+        }
+        if (emoji === EMOJIS.TREE && !limitPlanting('tree', 1)) {
+            return;
+        }
+
         const emojiElement = document.createElement('div');
         if (emoji === EMOJIS.TREE) {
             emojiElement.classList.add('emoji', 'tree');
@@ -50,7 +61,7 @@ document.addEventListener('DOMContentLoaded', () => {
         playArea.appendChild(emojiElement);
 
         if (emoji === EMOJIS.BUSH) {
-            addButterflies(x, y);
+            addButterflies(x, y, butterflyLands);
         } else if (emoji === EMOJIS.TREE) {
             addBird(x, y);
         }
