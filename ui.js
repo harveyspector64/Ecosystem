@@ -2,7 +2,9 @@
 
 document.addEventListener('DOMContentLoaded', () => {
     const playArea = document.getElementById('play-area');
-    
+    const treeElement = document.getElementById('tree');
+    let butterflyLanded = false;
+
     INITIAL_EMOJIS.forEach(item => {
         const element = document.getElementById(item.id);
         if (item.disabled) {
@@ -27,8 +29,10 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     function addEmojiToPlayArea(emoji, x, y) {
+        if (emoji === EMOJIS.TREE && !butterflyLanded) {
+            return;
+        }
         const emojiElement = document.createElement('div');
-        emojiElement.textContent = emoji;
         if (emoji === EMOJIS.TREE) {
             emojiElement.classList.add('emoji', 'tree');
         } else if (emoji === EMOJIS.BUTTERFLY) {
@@ -47,15 +51,23 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (emoji === EMOJIS.BUSH) {
             addButterflies(x, y);
-            unlockTree();
         } else if (emoji === EMOJIS.TREE) {
             addBird(x, y);
         }
     }
 
     function unlockTree() {
-        const tree = document.getElementById('tree');
-        tree.classList.remove('disabled');
-        tree.setAttribute('draggable', 'true');
+        treeElement.classList.remove('disabled');
+        treeElement.setAttribute('draggable', 'true');
+    }
+
+    function butterflyLands() {
+        butterflyLanded = true;
+        unlockTree();
+    }
+
+    function limitPlanting(emoji, maxCount) {
+        const currentCount = document.querySelectorAll(`.emoji.${emoji}`).length;
+        return currentCount < maxCount;
     }
 });
