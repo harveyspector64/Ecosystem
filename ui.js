@@ -16,9 +16,12 @@ document.addEventListener('DOMContentLoaded', () => {
         if (item.disabled) {
             element.classList.add('disabled');
             element.setAttribute('draggable', 'false');
+        } else {
+            element.setAttribute('draggable', 'true');
         }
         element.addEventListener('dragstart', (e) => {
             e.dataTransfer.setData('text/plain', item.emoji);
+            console.log('Drag started:', item.emoji); // Debugging
         });
     });
 
@@ -52,17 +55,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const emojiElement = document.createElement('div');
         emojiElement.textContent = emoji;
+        emojiElement.classList.add('emoji');
 
         if (emoji === EMOJIS.TREE) {
-            emojiElement.classList.add('emoji', 'tree');
+            emojiElement.classList.add('tree');
         } else if (emoji === EMOJIS.BUTTERFLY) {
-            emojiElement.classList.add('emoji', 'butterfly');
+            emojiElement.classList.add('butterfly');
         } else if (emoji === EMOJIS.BIRD) {
-            emojiElement.classList.add('emoji', 'bird');
+            emojiElement.classList.add('bird');
         } else if (emoji === EMOJIS.WORM) {
-            emojiElement.classList.add('emoji', 'worm');
-        } else {
-            emojiElement.classList.add('emoji');
+            emojiElement.classList.add('worm');
         }
 
         emojiElement.style.position = 'absolute';
