@@ -20,7 +20,7 @@ body {
 }
 
 .emoji {
-    font-size: 20px; /* Keep size for flowering bushes */
+    font-size: 20px; /* Size for panel emojis */
     cursor: pointer;
     margin: 10px 0;
 }
@@ -36,4 +36,12 @@ body {
 
 .tree {
     font-size: 80px; /* Larger size for trees */
+}
+
+.bird {
+    font-size: 30px; /* Relative size for birds */
+}
+
+.worm {
+    font-size: 10px; /* Smaller size for worms */
 }
