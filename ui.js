@@ -29,7 +29,17 @@ document.addEventListener('DOMContentLoaded', () => {
     function addEmojiToPlayArea(emoji, x, y) {
         const emojiElement = document.createElement('div');
         emojiElement.textContent = emoji;
-        emojiElement.classList.add('emoji');
+        if (emoji === EMOJIS.TREE) {
+            emojiElement.classList.add('emoji', 'tree');
+        } else if (emoji === EMOJIS.BUTTERFLY) {
+            emojiElement.classList.add('emoji', 'butterfly');
+        } else if (emoji === EMOJIS.BIRD) {
+            emojiElement.classList.add('emoji', 'bird');
+        } else if (emoji === EMOJIS.WORM) {
+            emojiElement.classList.add('emoji', 'worm');
+        } else {
+            emojiElement.classList.add('emoji');
+        }
         emojiElement.style.position = 'absolute';
         emojiElement.style.left = `${x}px`;
         emojiElement.style.top = `${y}px`;
