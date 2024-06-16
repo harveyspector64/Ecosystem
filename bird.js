@@ -1,29 +1,27 @@
-// bird.js
+// birds.js
 
 function addBird(x, y) {
-    console.log("Bird instantiated offscreen.");
     const playArea = document.getElementById('play-area');
     const birdElement = document.createElement('div');
-    birdElement.textContent = EMOJIS.BIRD;
+    birdElement.textContent = '🐦'; // Use the bird emoji you prefer
     birdElement.classList.add('emoji', 'bird');
     birdElement.style.position = 'absolute';
     birdElement.style.left = `${getRandomEdgePosition('x')}px`;
     birdElement.style.top = `${getRandomEdgePosition('y')}px`;
     playArea.appendChild(birdElement);
 
-    birdElement.hunger = 100;
-    birdElement.state = 'flying';
-
-    startFlightPattern(birdElement, x, y);
+    birdElement.hunger = 100; // Initialize hunger bar
+    moveBird(birdElement, x, y);
+    console.log("Bird added at", birdElement.style.left, birdElement.style.top);
 }
 
-function startFlightPattern(bird, targetX, targetY) {
-    console.log("Bird started flight pattern.");
+function moveBird(bird, targetX, targetY) {
     const interval = setInterval(() => {
         const currentX = parseFloat(bird.style.left);
         const currentY = parseFloat(bird.style.top);
-        const angle = Math.random() * Math.PI * 2;
-        const distance = Math.random() * 20 + 30;
+
+        const angle = Math.random() * Math.PI * 2; // Random angle
+        const distance = Math.random() * 20 + 30; // Smaller distance for smoother movement
 
         const newX = currentX + distance * Math.cos(angle);
         const newY = currentY + distance * Math.sin(angle);
@@ -31,98 +29,37 @@ function startFlightPattern(bird, targetX, targetY) {
         bird.style.left = `${newX}px`;
         bird.style.top = `${newY}px`;
 
-        if (Math.random() < 0.1) {
-            clearInterval(interval);
-            console.log("Bird is about to land.");
-            birdLanding(bird, targetX, targetY);
-        }
-    }, 300);
-}
+        bird.hunger -= 1; // Decrease hunger over time
 
-function birdLanding(bird, treeX, treeY) {
-    console.log("Bird landing initiated.");
-    const interval = setInterval(() => {
-        const currentX = parseFloat(bird.style.left);
-        const currentY = parseFloat(bird.style.top);
-        const angle = Math.atan2(treeY - currentY, treeX - currentX);
-        const newX = currentX + Math.cos(angle) * 2;
-        const newY = currentY + Math.sin(angle) * 2;
-
-        bird.style.left = `${newX}px`;
-        bird.style.top = `${newY}px`;
-
-        const distanceToTree = Math.sqrt((newX - treeX) ** 2 + (newY - treeY) ** 2);
-        if (distanceToTree < 20) {
-            clearInterval(interval);
-            console.log("Bird has landed on the tree.");
-            bird.state = 'roosting';
-            bird.style.left = `${treeX}px`;
-            bird.style.top = `${treeY}px`;
-            birdRoosting(bird, treeX, treeY);
-        }
-    }, 50);
-}
-
-function birdRoosting(bird, treeX, treeY) {
-    console.log("Bird is roosting.");
-    const interval = setInterval(() => {
-        bird.hunger -= 1;
-        console.log("Bird hunger: ", bird.hunger);
         if (bird.hunger <= 60) {
             clearInterval(interval);
-            console.log("Bird is hungry and will start flying again.");
-            bird.state = 'flying';
-            startFlightPattern(bird, treeX, treeY);
+            birdLand(bird, targetX, targetY);
+            console.log("Bird hunger low, landing at", bird.style.left, bird.style.top);
         }
-    }, 1000);
+    }, 300); // Slower interval for smoother, less jerky movement
 }
 
-function birdHunting(bird) {
-    console.log("Bird is hunting.");
-    const interval = setInterval(() => {
-        const currentX = parseFloat(bird.style.left);
-        const currentY = parseFloat(bird.style.top);
-        const angle = Math.random() * Math.PI * 2;
-        const distance = 5;
+function birdLand(bird, targetX, targetY) {
+    bird.style.left = `${targetX}px`;
+    bird.style.top = `${targetY}px`;
+    bird.hunger = 100; // Reset hunger
+    console.log("Bird landed at", bird.style.left, bird.style.top);
 
-        const newX = currentX + distance * Math.cos(angle);
-        const newY = currentY + distance * Math.sin(angle);
+    setTimeout(() => {
+        moveBird(bird, targetX, targetY);
+        console.log("Bird taking off from", bird.style.left, bird.style.top);
+    }, getRandomTime(5, 10) * 1000);
+}
 
-        bird.style.left = `${newX}px`;
-        bird.style.top = `${newY}px`;
-
-        if (Math.random() < 0.1) {
-            clearInterval(interval);
-            console.log("Bird is roosting again.");
-            bird.state = 'roosting';
-            startFlightPattern(bird, currentX, currentY);
-        }
-
-        // Check for worms
-        const worms = document.querySelectorAll('.worm');
-        worms.forEach(worm => {
-            const wormX = parseFloat(worm.style.left);
-            const wormY = parseFloat(worm.style.top);
-            const distanceToWorm = Math.sqrt((wormX - newX) ** 2 + (wormY - newY) ** 2);
-
-            if (distanceToWorm < 10) {
-                worm.remove();
-                bird.hunger = Math.min(bird.hunger + 20, 100);
-                console.log("Bird ate a worm. Hunger: ", bird.hunger);
-            }
-        });
-    }, 500);
+function getRandomTime(min, max) {
+    return Math.random() * (max - min) + min;
 }
 
 function getRandomEdgePosition(axis) {
     const playArea = document.getElementById('play-area');
     if (axis === 'x') {
-        return Math.random() > 0.5 ? 0 : playArea.clientWidth - 20;
+        return Math.random() > 0.5 ? 0 : playArea.clientWidth - 20; // Adjust 20 for margin
     } else {
         return Math.random() > 0.5 ? 0 : playArea.clientHeight - 20;
     }
-}
-
-function getRandomTime(min, max) {
-    return Math.random() * (max - min) + min;
 }
