@@ -1,5 +1,3 @@
-// ui.js
-
 document.addEventListener('DOMContentLoaded', () => {
     const playArea = document.getElementById('play-area');
     
@@ -28,21 +26,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function addEmojiToPlayArea(emoji, x, y) {
         const emojiElement = document.createElement('div');
-        if (emoji === EMOJIS.TREE) {
-            emojiElement.classList.add('tree');
-        } else {
-            emojiElement.textContent = emoji;
-            emojiElement.classList.add('emoji');
-        }
-
-        if (emoji === EMOJIS.BUTTERFLY) {
-            emojiElement.classList.add('butterfly');
-        } else if (emoji === EMOJIS.BIRD) {
-            emojiElement.classList.add('bird');
-        } else if (emoji === EMOJIS.WORM) {
-            emojiElement.classList.add('worm');
-        }
-
+        emojiElement.textContent = emoji;
+        emojiElement.classList.add('emoji');
+        emojiElement.style.position = 'absolute';
         emojiElement.style.left = `${x}px`;
         emojiElement.style.top = `${y}px`;
         playArea.appendChild(emojiElement);
