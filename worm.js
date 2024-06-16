@@ -4,11 +4,10 @@ function addWorms(x, y) {
     wormElement.textContent = EMOJIS.WORM;
     wormElement.classList.add('emoji', 'worm');
     wormElement.style.position = 'absolute';
-    wormElement.style.left = `${getRandomOffset()}px`;
-    wormElement.style.top = `${getRandomOffset()}px`;
+    wormElement.style.left = `${x + getRandomOffset()}px`;
+    wormElement.style.top = `${y + getRandomOffset()}px`;
     playArea.appendChild(wormElement);
-
-    console.log(`Worm placed at: (${getRandomOffset()}, ${getRandomOffset()})`);
+    console.log(`Worm placed at: (${x + getRandomOffset()}, ${y + getRandomOffset()})`);
 }
 
 function getRandomOffset() {
