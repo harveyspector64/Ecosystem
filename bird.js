@@ -26,7 +26,7 @@ function moveBirdToTree(bird, treeX, treeY) {
 
     const interval = setInterval(() => {
         const radius = 60; // Radius for the circular path
-        angle += 0.05; // Increment angle for smooth circular movement
+        angle += 0.02; // Increment angle for smooth circular movement
 
         const newX = centerX + radius * Math.cos(angle);
         const newY = centerY + radius * Math.sin(angle);
@@ -50,8 +50,8 @@ function landInTree(bird, treeX, treeY) {
     if (!tree) return;
 
     const treeBounds = tree.getBoundingClientRect();
-    const randomX = Math.random() * treeBounds.width + treeBounds.left;
-    const randomY = Math.random() * treeBounds.height + treeBounds.top;
+    const randomX = treeBounds.left + Math.random() * treeBounds.width;
+    const randomY = treeBounds.top + Math.random() * treeBounds.height;
 
     bird.style.left = `${randomX}px`;
     bird.style.top = `${randomY}px`;
