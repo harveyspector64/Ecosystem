@@ -1,8 +1,14 @@
+// ui.js
+
 document.addEventListener('DOMContentLoaded', () => {
     const playArea = document.getElementById('play-area');
-
+    
     INITIAL_EMOJIS.forEach(item => {
         const element = document.getElementById(item.id);
+        if (item.disabled) {
+            element.classList.add('disabled');
+            element.setAttribute('draggable', 'false');
+        }
         element.addEventListener('dragstart', (e) => {
             e.dataTransfer.setData('text/plain', item.emoji);
         });
@@ -22,27 +28,36 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function addEmojiToPlayArea(emoji, x, y) {
         const emojiElement = document.createElement('div');
-        emojiElement.textContent = emoji;
         if (emoji === EMOJIS.TREE) {
-            emojiElement.classList.add('emoji', 'tree');
-        } else if (emoji === EMOJIS.BUTTERFLY) {
-            emojiElement.classList.add('emoji', 'butterfly');
-        } else if (emoji === EMOJIS.BIRD) {
-            emojiElement.classList.add('emoji', 'bird');
-        } else if (emoji === EMOJIS.WORM) {
-            emojiElement.classList.add('emoji', 'worm');
+            emojiElement.classList.add('tree');
         } else {
+            emojiElement.textContent = emoji;
             emojiElement.classList.add('emoji');
         }
-        emojiElement.style.position = 'absolute';
+
+        if (emoji === EMOJIS.BUTTERFLY) {
+            emojiElement.classList.add('butterfly');
+        } else if (emoji === EMOJIS.BIRD) {
+            emojiElement.classList.add('bird');
+        } else if (emoji === EMOJIS.WORM) {
+            emojiElement.classList.add('worm');
+        }
+
         emojiElement.style.left = `${x}px`;
         emojiElement.style.top = `${y}px`;
         playArea.appendChild(emojiElement);
 
         if (emoji === EMOJIS.BUSH) {
             addButterflies(x, y);
+            unlockTree();
         } else if (emoji === EMOJIS.TREE) {
             addBird(x, y);
         }
+    }
+
+    function unlockTree() {
+        const tree = document.getElementById('tree');
+        tree.classList.remove('disabled');
+        tree.setAttribute('draggable', 'true');
     }
 });
