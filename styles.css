@@ -1,5 +1,3 @@
-/* styles.css */
-
 body {
     display: flex;
     margin: 0;
@@ -25,25 +23,4 @@ body {
 .emoji {
     font-size: 24px;
     cursor: grab;
-}
-
-.disabled {
-    color: #ccc;
-}
-
-.butterfly {
-    font-size: 15px; /* Smaller size for butterflies */
-    opacity: 0.7; /* Slightly transparent */
-}
-
-.tree {
-    font-size: 100px; /* Larger size for trees */
-}
-
-.bird {
-    font-size: 30px; /* Relative size for birds */
-}
-
-.worm {
-    font-size: 10px; /* Smaller size for worms */
 }
