@@ -1,6 +1,7 @@
 // bird.js
 
 function addBird(x, y) {
+    console.log("Bird instantiated offscreen.");
     const playArea = document.getElementById('play-area');
     const birdElement = document.createElement('div');
     birdElement.textContent = EMOJIS.BIRD;
@@ -17,6 +18,7 @@ function addBird(x, y) {
 }
 
 function startFlightPattern(bird, targetX, targetY) {
+    console.log("Bird started flight pattern.");
     const interval = setInterval(() => {
         const currentX = parseFloat(bird.style.left);
         const currentY = parseFloat(bird.style.top);
@@ -31,12 +33,14 @@ function startFlightPattern(bird, targetX, targetY) {
 
         if (Math.random() < 0.1) {
             clearInterval(interval);
+            console.log("Bird is about to land.");
             birdLanding(bird, targetX, targetY);
         }
     }, 300);
 }
 
 function birdLanding(bird, treeX, treeY) {
+    console.log("Bird landing initiated.");
     const interval = setInterval(() => {
         const currentX = parseFloat(bird.style.left);
         const currentY = parseFloat(bird.style.top);
@@ -50,6 +54,7 @@ function birdLanding(bird, treeX, treeY) {
         const distanceToTree = Math.sqrt((newX - treeX) ** 2 + (newY - treeY) ** 2);
         if (distanceToTree < 20) {
             clearInterval(interval);
+            console.log("Bird has landed on the tree.");
             bird.state = 'roosting';
             bird.style.left = `${treeX}px`;
             bird.style.top = `${treeY}px`;
@@ -59,28 +64,21 @@ function birdLanding(bird, treeX, treeY) {
 }
 
 function birdRoosting(bird, treeX, treeY) {
+    console.log("Bird is roosting.");
     const interval = setInterval(() => {
         bird.hunger -= 1;
+        console.log("Bird hunger: ", bird.hunger);
         if (bird.hunger <= 60) {
             clearInterval(interval);
+            console.log("Bird is hungry and will start flying again.");
             bird.state = 'flying';
             startFlightPattern(bird, treeX, treeY);
         }
     }, 1000);
 }
 
-function addWorms() {
-    const playArea = document.getElementById('play-area');
-    const wormElement = document.createElement('div');
-    wormElement.textContent = EMOJIS.WORM;
-    wormElement.classList.add('emoji', 'worm');
-    wormElement.style.position = 'absolute';
-    wormElement.style.left = `${Math.random() * playArea.clientWidth}px`;
-    wormElement.style.top = `${Math.random() * playArea.clientHeight}px`;
-    playArea.appendChild(wormElement);
-}
-
 function birdHunting(bird) {
+    console.log("Bird is hunting.");
     const interval = setInterval(() => {
         const currentX = parseFloat(bird.style.left);
         const currentY = parseFloat(bird.style.top);
@@ -95,6 +93,7 @@ function birdHunting(bird) {
 
         if (Math.random() < 0.1) {
             clearInterval(interval);
+            console.log("Bird is roosting again.");
             bird.state = 'roosting';
             startFlightPattern(bird, currentX, currentY);
         }
@@ -109,6 +108,7 @@ function birdHunting(bird) {
             if (distanceToWorm < 10) {
                 worm.remove();
                 bird.hunger = Math.min(bird.hunger + 20, 100);
+                console.log("Bird ate a worm. Hunger: ", bird.hunger);
             }
         });
     }, 500);
