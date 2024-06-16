@@ -13,6 +13,11 @@ document.addEventListener('DOMContentLoaded', () => {
         event.dataTransfer.setData('text/plain', 'worm');
     });
 
+    // Adding event listener to bush emoji
+    document.getElementById('bush-emoji').addEventListener('dragstart', function(event) {
+        event.dataTransfer.setData('text/plain', 'bush');
+    });
+
     playArea.addEventListener('dragover', function(event) {
         event.preventDefault();
     });
@@ -27,6 +32,8 @@ document.addEventListener('DOMContentLoaded', () => {
             addTree(x, y);
         } else if (data === 'worm') {
             addWorm(x, y);
+        } else if (data === 'bush') {
+            addBush(x, y);
         }
     });
 });
@@ -42,6 +49,19 @@ function addTree(x, y) {
     playArea.appendChild(treeElement);
 
     addBird(x, y); // Add a bird when a tree is placed
+}
+
+function addBush(x, y) {
+    const playArea = document.getElementById('play-area');
+    const bushElement = document.createElement('div');
+    bushElement.textContent = '🌹';
+    bushElement.classList.add('emoji', 'bush');
+    bushElement.style.position = 'absolute';
+    bushElement.style.left = `${x}px`;
+    bushElement.style.top = `${y}px`;
+    playArea.appendChild(bushElement);
+
+    addButterflies(x, y); // Add butterflies when a bush is placed
 }
 
 function addWorm(x, y) {
