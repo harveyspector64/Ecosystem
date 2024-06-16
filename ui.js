@@ -34,7 +34,7 @@ document.addEventListener('DOMContentLoaded', () => {
 function addTree(x, y) {
     const playArea = document.getElementById('play-area');
     const treeElement = document.createElement('div');
-    treeElement.textContent = EMOJIS.TREE;
+    treeElement.textContent = '🌳';
     treeElement.classList.add('emoji', 'tree');
     treeElement.style.position = 'absolute';
     treeElement.style.left = `${x}px`;
@@ -47,7 +47,7 @@ function addTree(x, y) {
 function addWorm(x, y) {
     const playArea = document.getElementById('play-area');
     const wormElement = document.createElement('div');
-    wormElement.textContent = EMOJIS.WORM;
+    wormElement.textContent = '🐛';
     wormElement.classList.add('emoji', 'worm');
     wormElement.style.position = 'absolute';
     wormElement.style.left = `${x}px`;
