@@ -1,10 +1,8 @@
-// constants.js
-
 const EMOJIS = {
     BUSH: '🌺',
     TREE: '🌳',
     BUTTERFLY: '🦋',
-    BIRD: '🐦',
+    BIRD: '🐦', // Ensure this is a good cross-platform bird emoji
     WORM: '🐛'
 };
 
