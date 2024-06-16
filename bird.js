@@ -20,13 +20,13 @@ function addBird(x, y) {
 
 function moveBirdToTree(bird, treeX, treeY) {
     const playArea = document.getElementById('play-area');
-    const centerX = treeX;
-    const centerY = treeY - 60; // Offset to the top part of the tree
+    const centerX = treeX + 40; // Centering the target on the tree
+    const centerY = treeY - 40; // Centering the target on the tree
     let angle = 0;
 
     const interval = setInterval(() => {
-        const radius = 50; // Radius for the circular path
-        angle += 0.1; // Increment angle for smooth circular movement
+        const radius = 60; // Radius for the circular path
+        angle += 0.05; // Increment angle for smooth circular movement
 
         const newX = centerX + radius * Math.cos(angle);
         const newY = centerY + radius * Math.sin(angle);
@@ -42,12 +42,19 @@ function moveBirdToTree(bird, treeX, treeY) {
             clearInterval(interval);
             landInTree(bird, treeX, treeY);
         }
-    }, 100);
+    }, 150); // Slower interval for smoother, less jerky movement
 }
 
 function landInTree(bird, treeX, treeY) {
-    bird.style.left = `${treeX}px`;
-    bird.style.top = `${treeY - 60}px`; // Land on the top part of the tree
+    const tree = document.querySelector(`.emoji.tree[style*='left: ${treeX}px; top: ${treeY}px']`);
+    if (!tree) return;
+
+    const treeBounds = tree.getBoundingClientRect();
+    const randomX = Math.random() * treeBounds.width + treeBounds.left;
+    const randomY = Math.random() * treeBounds.height + treeBounds.top;
+
+    bird.style.left = `${randomX}px`;
+    bird.style.top = `${randomY}px`;
     bird.isRoosting = true;
     bird.isFlying = false;
     bird.isHunting = false;
