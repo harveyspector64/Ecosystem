@@ -27,15 +27,15 @@ function moveBird(bird, targetX, targetY) {
             moveBird(bird, bird.landingSpotX, bird.landingSpotY); // Return to tree
             return;
         }
-        
+
         const currentX = parseFloat(bird.style.left);
         const currentY = parseFloat(bird.style.top);
 
         const angle = Math.random() * Math.PI * 2; // Random angle
         const distance = Math.random() * 50 + 50; // Random distance
 
-        const newX = currentX + distance * Math.cos(angle);
-        const newY = currentY + distance * Math.sin(angle);
+        const newX = Math.min(Math.max(currentX + distance * Math.cos(angle), 0), playArea.clientWidth - 20);
+        const newY = Math.min(Math.max(currentY + distance * Math.sin(angle), 0), playArea.clientHeight - 20);
 
         bird.style.left = `${newX}px`;
         bird.style.top = `${newY}px`;
@@ -60,7 +60,15 @@ function landInTree(bird, targetX, targetY) {
     bird.isRoosting = true;
     bird.isFlying = false;
     bird.isHunting = false;
-    
+
+    // Trigger worm appearance
+    if (!bird.hasLanded) {
+        bird.hasLanded = true;
+        for (let i = 0; i < 5; i++) { // Add initial worms
+            addWorms(targetX, targetY);
+        }
+    }
+
     // Chance to fly again even when above 60 hunger
     setTimeout(() => {
         if (bird.isRoosting && bird.hunger > 60 && Math.random() < 0.2) { // 20% chance to fly
@@ -79,6 +87,8 @@ function landOnGround(bird) {
 }
 
 function birdWalk(bird) {
+    let steps = Math.floor(Math.random() * 3) + 2; // 2-4 steps
+
     const interval = setInterval(() => {
         if (bird.hunger <= 0) {
             clearInterval(interval);
@@ -92,18 +102,31 @@ function birdWalk(bird) {
         const angle = Math.random() * Math.PI * 2; // Random angle
         const distance = Math.random() * 5 + 10; // Shorter steps for walking
 
-        const newX = currentX + distance * Math.cos(angle);
-        const newY = currentY + distance * Math.sin(angle);
+        const newX = Math.min(Math.max(currentX + distance * Math.cos(angle), 0), playArea.clientWidth - 20);
+        const newY = Math.min(Math.max(currentY + distance * Math.sin(angle), 0), playArea.clientHeight - 20);
 
         bird.style.left = `${newX}px`;
         bird.style.top = `${newY}px`;
 
         bird.hunger -= 1; // Continue decreasing hunger
 
-        // Simulate finding a worm
-        if (Math.random() < 0.05) { // 5% chance to find a worm
-            bird.hunger += 20; // Eating a worm increases hunger by 20
-            if (bird.hunger > 100) bird.hunger = 100; // Cap hunger at 100
+        // Check for worms
+        const worms = document.querySelectorAll('.worm');
+        worms.forEach(worm => {
+            const wormX = parseFloat(worm.style.left);
+            const wormY = parseFloat(worm.style.top);
+            const distanceToWorm = Math.sqrt((wormX - newX) ** 2 + (wormY - newY) ** 2);
+            if (distanceToWorm < 20) {
+                bird.hunger += 20; // Eating a worm increases hunger by 20
+                worm.remove(); // Remove the worm from the map
+                if (bird.hunger > 100) bird.hunger = 100; // Cap hunger at 100
+            }
+        });
+
+        steps -= 1;
+        if (steps <= 0) {
+            clearInterval(interval);
+            moveBird(bird, bird.landingSpotX, bird.landingSpotY); // Take off and fly again
         }
 
     }, 1000); // Slower interval for walking
