@@ -1,5 +1,3 @@
-// butterfly.js
-
 function addButterflies(x, y) {
     const numButterflies = Math.floor(Math.random() * 2) + 1; // 1-2 butterflies per bush
     for (let i = 0; i < numButterflies; i++) {
@@ -10,7 +8,7 @@ function addButterflies(x, y) {
 function createButterfly(targetX, targetY) {
     const playArea = document.getElementById('play-area');
     const butterflyElement = document.createElement('div');
-    butterflyElement.textContent = EMOJIS.BUTTERFLY;
+    butterflyElement.textContent = '🦋';
     butterflyElement.classList.add('emoji', 'butterfly');
     butterflyElement.style.position = 'absolute';
     butterflyElement.style.left = getRandomEdgePosition('x') + 'px';
@@ -45,35 +43,13 @@ function moveButterfly(butterfly, targetX, targetY) {
 }
 
 function butterflyLand(butterfly, targetX, targetY) {
-    const bushes = document.querySelectorAll('.emoji');
-    let nearestBush = null;
-    let minDistance = Infinity;
+    butterfly.style.left = `${targetX}px`;
+    butterfly.style.top = `${targetY}px`;
+    butterfly.hunger = 100; // Reset hunger
 
-    bushes.forEach(bush => {
-        if (bush.textContent === EMOJIS.BUSH) {
-            const bushX = parseFloat(bush.style.left);
-            const bushY = parseFloat(bush.style.top);
-            const distance = Math.sqrt((bushX - targetX) ** 2 + (bushY - targetY) ** 2);
-
-            if (distance < minDistance) {
-                minDistance = distance;
-                nearestBush = bush;
-            }
-        }
-    });
-
-    if (nearestBush) {
-        butterfly.style.left = nearestBush.style.left;
-        butterfly.style.top = nearestBush.style.top;
-
-        setTimeout(() => {
-            butterfly.hunger = 100; // Reset hunger
-            moveButterfly(butterfly, parseFloat(nearestBush.style.left), parseFloat(nearestBush.style.top));
-            
-            // Unlock the tree when the first butterfly lands on the bush
-            unlockTree();
-        }, getRandomTime(5, 10) * 1000);
-    }
+    setTimeout(() => {
+        moveButterfly(butterfly, targetX, targetY);
+    }, getRandomTime(5, 10) * 1000);
 }
 
 function getRandomTime(min, max) {
