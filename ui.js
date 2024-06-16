@@ -1,12 +1,8 @@
 document.addEventListener('DOMContentLoaded', () => {
     const playArea = document.getElementById('play-area');
-    
+
     INITIAL_EMOJIS.forEach(item => {
         const element = document.getElementById(item.id);
-        if (item.disabled) {
-            element.classList.add('disabled');
-            element.setAttribute('draggable', 'false');
-        }
         element.addEventListener('dragstart', (e) => {
             e.dataTransfer.setData('text/plain', item.emoji);
         });
@@ -45,15 +41,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (emoji === EMOJIS.BUSH) {
             addButterflies(x, y);
-            unlockTree();
         } else if (emoji === EMOJIS.TREE) {
             addBird(x, y);
         }
-    }
-
-    function unlockTree() {
-        const tree = document.getElementById('tree');
-        tree.classList.remove('disabled');
-        tree.setAttribute('draggable', 'true');
     }
 });
