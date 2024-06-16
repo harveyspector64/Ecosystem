@@ -31,8 +31,8 @@ function flyToTree(bird, treeX, treeY) {
         if (distanceToTree < 20) {
             clearInterval(interval);
             bird.state = 'roosting';
-            bird.style.left = `${treeX - 30}px`; // Adjust to center the bird on the tree
-            bird.style.top = `${treeY - 80}px`; // Adjust to center the bird on the tree
+            bird.style.left = `${treeX}px`; // Center on the tree
+            bird.style.top = `${treeY}px`; // Center on the tree
             birdRoosting(bird, treeX, treeY);
         }
     }, 50);
@@ -44,12 +44,38 @@ function birdRoosting(bird, treeX, treeY) {
         if (bird.hunger <= 60 || Math.random() < 0.2) {
             clearInterval(interval);
             bird.state = 'flying';
-            flyToGround(bird, treeX, treeY);
+            flyToGround(bird);
+        } else {
+            if (Math.random() < 0.1) {
+                bird.state = 'flying';
+                randomFlight(bird, treeX, treeY);
+            }
         }
     }, 1000);
 }
 
-function flyToGround(bird, treeX, treeY) {
+function randomFlight(bird, treeX, treeY) {
+    const interval = setInterval(() => {
+        const currentX = parseFloat(bird.style.left);
+        const currentY = parseFloat(bird.style.top);
+        const angle = Math.random() * 2 * Math.PI;
+        const newX = currentX + Math.cos(angle) * 2;
+        const newY = currentY + Math.sin(angle) * 2;
+
+        bird.style.left = `${newX}px`;
+        bird.style.top = `${newY}px`;
+
+        if (Math.random() < 0.1) {
+            clearInterval(interval);
+            bird.state = 'roosting';
+            bird.style.left = `${treeX}px`;
+            bird.style.top = `${treeY}px`;
+            birdRoosting(bird, treeX, treeY);
+        }
+    }, 50);
+}
+
+function flyToGround(bird) {
     const interval = setInterval(() => {
         const currentX = parseFloat(bird.style.left);
         const currentY = parseFloat(bird.style.top);
@@ -63,8 +89,6 @@ function flyToGround(bird, treeX, treeY) {
         if (Math.random() < 0.1) {
             clearInterval(interval);
             bird.state = 'hunting';
-            bird.style.left = `${newX}px`; // Simulate landing on ground
-            bird.style.top = `${newY}px`; // Simulate landing on ground
             birdHunting(bird);
         }
     }, 50);
@@ -82,7 +106,7 @@ function birdHunting(bird) {
                 flyToTree(bird, parseFloat(bird.style.left), parseFloat(bird.style.top));
             } else {
                 bird.state = 'flying';
-                flyToGround(bird, parseFloat(bird.style.left), parseFloat(bird.style.top));
+                flyToGround(bird);
             }
         } else {
             const currentX = parseFloat(bird.style.left);
