@@ -66,12 +66,10 @@ function landInTree(bird, targetX, targetY) {
     bird.isFlying = false;
     bird.isHunting = false;
 
-    // Trigger worm appearance
+    // Trigger gradual worm appearance
     if (!bird.hasLanded) {
         bird.hasLanded = true;
-        for (let i = 0; i < 5; i++) { // Add initial worms
-            addWorms(targetX, targetY);
-        }
+        addWormsGradually(targetX, targetY);
     }
 
     // Chance to fly again even when above 60 hunger
@@ -82,6 +80,29 @@ function landInTree(bird, targetX, targetY) {
             moveBird(bird, targetX, targetY);
         }
     }, getRandomTime(10, 30) * 1000); // Random flight duration
+}
+
+function addWormsGradually(x, y) {
+    const interval = setInterval(() => {
+        if (document.querySelectorAll('.worm').length < 10) { // Limit number of worms
+            addWorms(x, y);
+        } else {
+            clearInterval(interval);
+        }
+    }, getRandomTime(5, 10) * 1000); // Add a worm every 5-10 seconds
+}
+
+function addWorms(x, y) {
+    const playArea = document.getElementById('play-area');
+    const wormElement = document.createElement('div');
+    wormElement.textContent = EMOJIS.WORM;
+    wormElement.classList.add('emoji', 'worm');
+    wormElement.style.position = 'absolute';
+    wormElement.style.left = `${x + getRandomOffset()}px`;
+    wormElement.style.top = `${y + getRandomOffset()}px`;
+    playArea.appendChild(wormElement);
+
+    console.log(`Worm placed at: (${x + getRandomOffset()}, ${y + getRandomOffset()})`);
 }
 
 function landOnGround(bird) {
@@ -154,4 +175,9 @@ function getRandomEdgePosition(axis) {
     } else {
         return Math.random() > 0.5 ? 0 : playArea.clientHeight - 20;
     }
+}
+
+function getRandomOffset() {
+    const playArea = document.getElementById('play-area');
+    return Math.floor(Math.random() * playArea.clientWidth);
 }
