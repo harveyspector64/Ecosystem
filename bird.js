@@ -15,7 +15,7 @@ function addBird(x, y) {
         birdElement.isRoosting = false;
         birdElement.isHunting = false;
         birdElement.isFlying = true;
-        
+
         moveBird(birdElement, x, y);
     }, getRandomTime(5, 15) * 1000);
 }
@@ -135,6 +135,8 @@ function birdWalk(bird) {
         steps -= 1;
         if (steps <= 0) {
             clearInterval(interval);
+            bird.isHunting = false;
+            bird.isFlying = true;
             moveBird(bird, bird.landingSpotX, bird.landingSpotY); // Take off and fly again
         }
 
