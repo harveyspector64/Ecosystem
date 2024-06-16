@@ -1,3 +1,5 @@
+// bird.js
+
 function addBird(x, y) {
     const playArea = document.getElementById('play-area');
     const birdElement = document.createElement('div');
@@ -11,7 +13,7 @@ function addBird(x, y) {
     birdElement.hunger = 100;
     birdElement.state = 'flying';
 
-    flyToTree(birdElement, x, y);
+    setTimeout(() => flyToTree(birdElement, x, y), getRandomTime(5, 15) * 1000);
 }
 
 function flyToTree(bird, treeX, treeY) {
@@ -112,8 +114,12 @@ function birdHunting(bird) {
 function getRandomEdgePosition(axis) {
     const playArea = document.getElementById('play-area');
     if (axis === 'x') {
-        return Math.random() > 0.5 ? 0 : playArea.clientWidth - 20;  // Adjust 20 for margin
+        return Math.random() > 0.5 ? 0 : playArea.clientWidth - 20; // Adjust 20 for margin
     } else {
         return Math.random() > 0.5 ? 0 : playArea.clientHeight - 20;
     }
+}
+
+function getRandomTime(min, max) {
+    return Math.random() * (max - min) + min;
 }
