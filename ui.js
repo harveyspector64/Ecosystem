@@ -1,59 +1,56 @@
+// ui.js
+
 document.addEventListener('DOMContentLoaded', () => {
     const playArea = document.getElementById('play-area');
-    
-    INITIAL_EMOJIS.forEach(item => {
-        const element = document.getElementById(item.id);
-        if (item.disabled) {
-            element.classList.add('disabled');
-            element.setAttribute('draggable', 'false');
-        }
-        element.addEventListener('dragstart', (e) => {
-            e.dataTransfer.setData('text/plain', item.emoji);
-        });
+
+    // Adding event listener to tree emoji
+    document.getElementById('tree-emoji').addEventListener('dragstart', function(event) {
+        event.dataTransfer.setData('text/plain', 'tree');
     });
 
-    playArea.addEventListener('dragover', (e) => {
-        e.preventDefault();
+    // Adding event listener to worm emoji
+    document.getElementById('worm-emoji').addEventListener('dragstart', function(event) {
+        event.dataTransfer.setData('text/plain', 'worm');
     });
 
-    playArea.addEventListener('drop', (e) => {
-        e.preventDefault();
-        const emoji = e.dataTransfer.getData('text/plain');
-        const x = e.clientX - playArea.offsetLeft;
-        const y = e.clientY - playArea.offsetTop;
-        addEmojiToPlayArea(emoji, x, y);
+    playArea.addEventListener('dragover', function(event) {
+        event.preventDefault();
     });
 
-    function addEmojiToPlayArea(emoji, x, y) {
-        const emojiElement = document.createElement('div');
-        emojiElement.textContent = emoji;
-        if (emoji === EMOJIS.TREE) {
-            emojiElement.classList.add('emoji', 'tree');
-        } else if (emoji === EMOJIS.BUTTERFLY) {
-            emojiElement.classList.add('emoji', 'butterfly');
-        } else if (emoji === EMOJIS.BIRD) {
-            emojiElement.classList.add('emoji', 'bird');
-        } else if (emoji === EMOJIS.WORM) {
-            emojiElement.classList.add('emoji', 'worm');
-        } else {
-            emojiElement.classList.add('emoji');
-        }
-        emojiElement.style.position = 'absolute';
-        emojiElement.style.left = `${x}px`;
-        emojiElement.style.top = `${y}px`;
-        playArea.appendChild(emojiElement);
+    playArea.addEventListener('drop', function(event) {
+        event.preventDefault();
+        const data = event.dataTransfer.getData('text/plain');
+        const x = event.clientX - playArea.offsetLeft;
+        const y = event.clientY - playArea.offsetTop;
 
-        if (emoji === EMOJIS.BUSH) {
-            addButterflies(x, y);
-            unlockTree();
-        } else if (emoji === EMOJIS.TREE) {
-            addBird(x, y);
+        if (data === 'tree') {
+            addTree(x, y);
+        } else if (data === 'worm') {
+            addWorm(x, y);
         }
-    }
-
-    function unlockTree() {
-        const tree = document.getElementById('tree');
-        tree.classList.remove('disabled');
-        tree.setAttribute('draggable', 'true');
-    }
+    });
 });
+
+function addTree(x, y) {
+    const playArea = document.getElementById('play-area');
+    const treeElement = document.createElement('div');
+    treeElement.textContent = EMOJIS.TREE;
+    treeElement.classList.add('emoji', 'tree');
+    treeElement.style.position = 'absolute';
+    treeElement.style.left = `${x}px`;
+    treeElement.style.top = `${y}px`;
+    playArea.appendChild(treeElement);
+
+    addBird(x, y); // Add a bird when a tree is placed
+}
+
+function addWorm(x, y) {
+    const playArea = document.getElementById('play-area');
+    const wormElement = document.createElement('div');
+    wormElement.textContent = EMOJIS.WORM;
+    wormElement.classList.add('emoji', 'worm');
+    wormElement.style.position = 'absolute';
+    wormElement.style.left = `${x}px`;
+    wormElement.style.top = `${y}px`;
+    playArea.appendChild(wormElement);
+}
