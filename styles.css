@@ -20,6 +20,7 @@ body {
 }
 
 .emoji {
+    font-size: 20px; /* Size for panel emojis */
     cursor: pointer;
     margin: 10px 0;
 }
@@ -29,22 +30,18 @@ body {
 }
 
 .butterfly {
-    font-size: 15px;
-    opacity: 0.7;
-}
-
-.bird {
-    font-size: 30px;
-}
-
-.worm {
-    font-size: 10px;
+    font-size: 15px; /* Smaller size for butterflies */
+    opacity: 0.7; /* Slightly transparent */
 }
 
 .tree {
-    width: 64px;
-    height: 64px;
-    background: url('Art/tree.png') no-repeat center center;
-    background-size: contain;
-    position: absolute;
+    font-size: 100px; /* Larger size for trees */
+}
+
+.bird {
+    font-size: 30px; /* Relative size for birds */
+}
+
+.worm {
+    font-size: 10px; /* Smaller size for worms */
 }
