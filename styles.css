@@ -25,10 +25,6 @@ body {
     margin: 10px 0;
 }
 
-.disabled {
-    color: #ccc;
-}
-
 .butterfly {
     font-size: 15px; /* Smaller size for butterflies */
     opacity: 0.7; /* Slightly transparent */
