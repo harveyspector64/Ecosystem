@@ -1,5 +1,3 @@
-// worm.js
-
 function addWorms(x, y) {
     const playArea = document.getElementById('play-area');
     const wormElement = document.createElement('div');
