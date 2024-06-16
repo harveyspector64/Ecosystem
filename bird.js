@@ -21,6 +21,7 @@ function addBird(x, y) {
 }
 
 function moveBird(bird, targetX, targetY) {
+    const playArea = document.getElementById('play-area');
     const interval = setInterval(() => {
         if (bird.hunger <= 0) {
             clearInterval(interval);
@@ -34,13 +35,17 @@ function moveBird(bird, targetX, targetY) {
         const angle = Math.random() * Math.PI * 2; // Random angle
         const distance = Math.random() * 50 + 50; // Random distance
 
-        const newX = Math.min(Math.max(currentX + distance * Math.cos(angle), 0), playArea.clientWidth - 20);
-        const newY = Math.min(Math.max(currentY + distance * Math.sin(angle), 0), playArea.clientHeight - 20);
+        let newX = currentX + distance * Math.cos(angle);
+        let newY = currentY + distance * Math.sin(angle);
+
+        // Ensure the bird stays within the play area
+        newX = Math.min(Math.max(newX, 0), playArea.clientWidth - 20);
+        newY = Math.min(Math.max(newY, 0), playArea.clientHeight - 20);
 
         bird.style.left = `${newX}px`;
         bird.style.top = `${newY}px`;
 
-        bird.hunger -= 1; // Decrease hunger over time
+        bird.hunger -= 0.5; // Decrease hunger over time
 
         const distanceToTarget = Math.sqrt((newX - targetX) ** 2 + (newY - targetY) ** 2);
         if (distanceToTarget < 20) {
@@ -102,8 +107,12 @@ function birdWalk(bird) {
         const angle = Math.random() * Math.PI * 2; // Random angle
         const distance = Math.random() * 5 + 10; // Shorter steps for walking
 
-        const newX = Math.min(Math.max(currentX + distance * Math.cos(angle), 0), playArea.clientWidth - 20);
-        const newY = Math.min(Math.max(currentY + distance * Math.sin(angle), 0), playArea.clientHeight - 20);
+        let newX = currentX + distance * Math.cos(angle);
+        let newY = currentY + distance * Math.sin(angle);
+
+        // Ensure the bird stays within the play area
+        newX = Math.min(Math.max(newX, 0), playArea.clientWidth - 20);
+        newY = Math.min(Math.max(newY, 0), playArea.clientHeight - 20);
 
         bird.style.left = `${newX}px`;
         bird.style.top = `${newY}px`;
