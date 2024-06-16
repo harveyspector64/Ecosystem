@@ -3,7 +3,6 @@ body {
     margin: 0;
     height: 100vh;
     font-family: Arial, sans-serif;
-    overflow: hidden; /* Prevent scrolling */
 }
 
 #sidebar {
@@ -11,10 +10,6 @@ body {
     background-color: #f0f0f0;
     padding: 10px;
     border-right: 1px solid #ccc;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    overflow-y: auto; /* Scrollable sidebar */
 }
 
 #play-area {
@@ -22,14 +17,12 @@ body {
     background-color: #ffffff;
     position: relative;
     overflow: hidden;
-    touch-action: none; /* Prevent default touch actions */
 }
 
 .emoji {
     font-size: 20px; /* Size for panel emojis */
     cursor: pointer;
     margin: 10px 0;
-    touch-action: none; /* Prevent touch actions on emojis */
 }
 
 .disabled {
