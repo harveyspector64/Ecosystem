@@ -10,33 +10,31 @@ function addBird(x, y) {
         playArea.appendChild(birdElement);
 
         birdElement.hunger = 100; // Initialize hunger meter
-        birdElement.landingSpotX = x;
-        birdElement.landingSpotY = y;
         birdElement.isRoosting = false;
         birdElement.isHunting = false;
         birdElement.isFlying = true;
 
-        moveBird(birdElement, x, y);
+        moveBirdToTree(birdElement, x, y);
     }, getRandomTime(5, 15) * 1000);
 }
 
-function moveBird(bird, targetX, targetY) {
+function moveBirdToTree(bird, treeX, treeY) {
     const playArea = document.getElementById('play-area');
-    const interval = setInterval(() => {
-        if (bird.hunger <= 0) {
-            clearInterval(interval);
-            moveBird(bird, bird.landingSpotX, bird.landingSpotY); // Return to tree
-            return;
-        }
+    const goldenRatio = 1.618;
 
+    const interval = setInterval(() => {
         const currentX = parseFloat(bird.style.left);
         const currentY = parseFloat(bird.style.top);
 
         const angle = Math.random() * Math.PI * 2; // Random angle
-        const distance = Math.random() * 50 + 50; // Random distance
+        const distance = Math.random() * 30 + 20; // Smaller distance for smoother movement
 
         let newX = currentX + distance * Math.cos(angle);
         let newY = currentY + distance * Math.sin(angle);
+
+        // Move in golden ratio pattern
+        newX = currentX + distance * Math.cos(goldenRatio * angle);
+        newY = currentY + distance * Math.sin(goldenRatio * angle);
 
         // Ensure the bird stays within the play area
         newX = Math.min(Math.max(newX, 0), playArea.clientWidth - 20);
@@ -47,21 +45,17 @@ function moveBird(bird, targetX, targetY) {
 
         bird.hunger -= 0.5; // Decrease hunger over time
 
-        const distanceToTarget = Math.sqrt((newX - targetX) ** 2 + (newY - targetY) ** 2);
-        if (distanceToTarget < 20) {
+        const distanceToTree = Math.sqrt((newX - treeX) ** 2 + (newY - treeY) ** 2);
+        if (distanceToTree < 50) {
             clearInterval(interval);
-            if (bird.hunger > 60) {
-                landInTree(bird, targetX, targetY);
-            } else {
-                landOnGround(bird);
-            }
+            landInTree(bird, treeX, treeY);
         }
-    }, 500);
+    }, 200);
 }
 
-function landInTree(bird, targetX, targetY) {
-    bird.style.left = `${targetX}px`;
-    bird.style.top = `${targetY - 60}px`; // Land on the top part of the tree
+function landInTree(bird, treeX, treeY) {
+    bird.style.left = `${treeX}px`;
+    bird.style.top = `${treeY - 60}px`; // Land on the top part of the tree
     bird.isRoosting = true;
     bird.isFlying = false;
     bird.isHunting = false;
@@ -69,7 +63,7 @@ function landInTree(bird, targetX, targetY) {
     // Trigger gradual worm appearance
     if (!bird.hasLanded) {
         bird.hasLanded = true;
-        addWormsGradually(targetX, targetY);
+        addWormsGradually(treeX, treeY);
     }
 
     // Chance to fly again even when above 60 hunger
@@ -77,32 +71,9 @@ function landInTree(bird, targetX, targetY) {
         if (bird.isRoosting && bird.hunger > 60 && Math.random() < 0.2) { // 20% chance to fly
             bird.isRoosting = false;
             bird.isFlying = true;
-            moveBird(bird, targetX, targetY);
+            moveBirdToTree(bird, treeX, treeY);
         }
     }, getRandomTime(10, 30) * 1000); // Random flight duration
-}
-
-function addWormsGradually(x, y) {
-    const interval = setInterval(() => {
-        if (document.querySelectorAll('.worm').length < 10) { // Limit number of worms
-            addWorms(x, y);
-        } else {
-            clearInterval(interval);
-        }
-    }, getRandomTime(5, 10) * 1000); // Add a worm every 5-10 seconds
-}
-
-function addWorms(x, y) {
-    const playArea = document.getElementById('play-area');
-    const wormElement = document.createElement('div');
-    wormElement.textContent = EMOJIS.WORM;
-    wormElement.classList.add('emoji', 'worm');
-    wormElement.style.position = 'absolute';
-    wormElement.style.left = `${x + getRandomOffset()}px`;
-    wormElement.style.top = `${y + getRandomOffset()}px`;
-    playArea.appendChild(wormElement);
-
-    console.log(`Worm placed at: (${x + getRandomOffset()}, ${y + getRandomOffset()})`);
 }
 
 function landOnGround(bird) {
@@ -118,7 +89,7 @@ function birdWalk(bird) {
     const interval = setInterval(() => {
         if (bird.hunger <= 0) {
             clearInterval(interval);
-            moveBird(bird, bird.landingSpotX, bird.landingSpotY); // Return to tree
+            moveBirdToTree(bird, bird.landingSpotX, bird.landingSpotY); // Return to tree
             return;
         }
 
@@ -158,10 +129,33 @@ function birdWalk(bird) {
             clearInterval(interval);
             bird.isHunting = false;
             bird.isFlying = true;
-            moveBird(bird, bird.landingSpotX, bird.landingSpotY); // Take off and fly again
+            moveBirdToTree(bird, bird.landingSpotX, bird.landingSpotY); // Take off and fly again
         }
 
     }, 1000); // Slower interval for walking
+}
+
+function addWormsGradually(x, y) {
+    const interval = setInterval(() => {
+        if (document.querySelectorAll('.worm').length < 10) { // Limit number of worms
+            addWorms(x, y);
+        } else {
+            clearInterval(interval);
+        }
+    }, getRandomTime(5, 10) * 1000); // Add a worm every 5-10 seconds
+}
+
+function addWorms(x, y) {
+    const playArea = document.getElementById('play-area');
+    const wormElement = document.createElement('div');
+    wormElement.textContent = EMOJIS.WORM;
+    wormElement.classList.add('emoji', 'worm');
+    wormElement.style.position = 'absolute';
+    wormElement.style.left = `${x + getRandomOffset()}px`;
+    wormElement.style.top = `${y + getRandomOffset()}px`;
+    playArea.appendChild(wormElement);
+
+    console.log(`Worm placed at: (${x + getRandomOffset()}, ${y + getRandomOffset()})`);
 }
 
 function getRandomTime(min, max) {
