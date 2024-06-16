@@ -20,37 +20,29 @@ function addBird(x, y) {
 
 function moveBirdToTree(bird, treeX, treeY) {
     const playArea = document.getElementById('play-area');
-    const goldenRatio = 1.618;
+    const centerX = treeX;
+    const centerY = treeY - 60; // Offset to the top part of the tree
+    let angle = 0;
 
     const interval = setInterval(() => {
-        const currentX = parseFloat(bird.style.left);
-        const currentY = parseFloat(bird.style.top);
+        const radius = 50; // Radius for the circular path
+        angle += 0.1; // Increment angle for smooth circular movement
 
-        const angle = Math.random() * Math.PI * 2; // Random angle
-        const distance = Math.random() * 30 + 20; // Smaller distance for smoother movement
-
-        let newX = currentX + distance * Math.cos(angle);
-        let newY = currentY + distance * Math.sin(angle);
-
-        // Move in golden ratio pattern
-        newX = currentX + distance * Math.cos(goldenRatio * angle);
-        newY = currentY + distance * Math.sin(goldenRatio * angle);
+        const newX = centerX + radius * Math.cos(angle);
+        const newY = centerY + radius * Math.sin(angle);
 
         // Ensure the bird stays within the play area
-        newX = Math.min(Math.max(newX, 0), playArea.clientWidth - 20);
-        newY = Math.min(Math.max(newY, 0), playArea.clientHeight - 20);
-
-        bird.style.left = `${newX}px`;
-        bird.style.top = `${newY}px`;
+        bird.style.left = `${Math.min(Math.max(newX, 0), playArea.clientWidth - 20)}px`;
+        bird.style.top = `${Math.min(Math.max(newY, 0), playArea.clientHeight - 20)}px`;
 
         bird.hunger -= 0.5; // Decrease hunger over time
 
         const distanceToTree = Math.sqrt((newX - treeX) ** 2 + (newY - treeY) ** 2);
-        if (distanceToTree < 50) {
+        if (distanceToTree < 50 && !bird.isRoosting) {
             clearInterval(interval);
             landInTree(bird, treeX, treeY);
         }
-    }, 200);
+    }, 100);
 }
 
 function landInTree(bird, treeX, treeY) {
