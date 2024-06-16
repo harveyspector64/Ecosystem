@@ -26,28 +26,28 @@ function flyToTree(bird, treeX, treeY) {
         bird.style.top = `${newY}px`;
 
         const distanceToTree = Math.sqrt((newX - treeX) ** 2 + (newY - treeY) ** 2);
-        if (distanceToTree < 10) {
+        if (distanceToTree < 20) {
             clearInterval(interval);
             bird.state = 'roosting';
-            bird.style.left = `${treeX}px`;
-            bird.style.top = `${treeY - 30}px`;
-            birdRoosting(bird);
+            bird.style.left = `${treeX - 30}px`; // Adjust to center the bird on the tree
+            bird.style.top = `${treeY - 80}px`; // Adjust to center the bird on the tree
+            birdRoosting(bird, treeX, treeY);
         }
     }, 50);
 }
 
-function birdRoosting(bird) {
+function birdRoosting(bird, treeX, treeY) {
     const interval = setInterval(() => {
         bird.hunger -= 1;
         if (bird.hunger <= 60 || Math.random() < 0.2) {
             clearInterval(interval);
             bird.state = 'flying';
-            flyToGround(bird);
+            flyToGround(bird, treeX, treeY);
         }
     }, 1000);
 }
 
-function flyToGround(bird) {
+function flyToGround(bird, treeX, treeY) {
     const interval = setInterval(() => {
         const currentX = parseFloat(bird.style.left);
         const currentY = parseFloat(bird.style.top);
@@ -61,7 +61,8 @@ function flyToGround(bird) {
         if (Math.random() < 0.1) {
             clearInterval(interval);
             bird.state = 'hunting';
-            bird.style.top = `${currentY + 10}px`;  // Simulate landing
+            bird.style.left = `${newX}px`; // Simulate landing on ground
+            bird.style.top = `${newY}px`; // Simulate landing on ground
             birdHunting(bird);
         }
     }, 50);
@@ -79,7 +80,7 @@ function birdHunting(bird) {
                 flyToTree(bird, parseFloat(bird.style.left), parseFloat(bird.style.top));
             } else {
                 bird.state = 'flying';
-                flyToGround(bird);
+                flyToGround(bird, parseFloat(bird.style.left), parseFloat(bird.style.top));
             }
         } else {
             const currentX = parseFloat(bird.style.left);
