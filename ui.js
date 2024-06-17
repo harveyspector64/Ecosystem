@@ -1,14 +1,16 @@
 document.addEventListener('DOMContentLoaded', () => {
     const playArea = document.getElementById('play-area');
 
-    // Adding event listener to tree emoji
     document.getElementById('tree-emoji').addEventListener('dragstart', function(event) {
         event.dataTransfer.setData('text/plain', 'tree');
     });
 
-    // Adding event listener to bush emoji
     document.getElementById('bush-emoji').addEventListener('dragstart', function(event) {
         event.dataTransfer.setData('text/plain', 'bush');
+    });
+
+    document.getElementById('worm-emoji').addEventListener('dragstart', function(event) {
+        event.dataTransfer.setData('text/plain', 'worm');
     });
 
     playArea.addEventListener('dragover', function(event) {
@@ -25,6 +27,8 @@ document.addEventListener('DOMContentLoaded', () => {
             addTree(x, y);
         } else if (data === 'bush') {
             addBush(x, y);
+        } else if (data === 'worm') {
+            addWorm(x, y);
         }
     });
 });
@@ -39,7 +43,7 @@ function addTree(x, y) {
     treeElement.style.top = `${y}px`;
     playArea.appendChild(treeElement);
 
-    addBird(x, y); // Add a bird when a tree is placed
+    addBird(x, y);
 }
 
 function addBush(x, y) {
@@ -52,5 +56,16 @@ function addBush(x, y) {
     bushElement.style.top = `${y}px`;
     playArea.appendChild(bushElement);
 
-    addButterflies(x, y); // Add butterflies when a bush is placed
+    addButterflies(x, y);
+}
+
+function addWorm(x, y) {
+    const playArea = document.getElementById('play-area');
+    const wormElement = document.createElement('div');
+    wormElement.textContent = '🐛';
+    wormElement.classList.add('emoji', 'worm');
+    wormElement.style.position = 'absolute';
+    wormElement.style.left = `${x}px`;
+    wormElement.style.top = `${y}px`;
+    playArea.appendChild(wormElement);
 }
