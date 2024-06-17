@@ -2,25 +2,53 @@ body {
     display: flex;
     margin: 0;
     height: 100vh;
+    font-family: Arial, sans-serif;
+    overflow: hidden; /* Prevent scrolling */
 }
 
-#emoji-panel {
+#sidebar {
+    width: 150px;
+    background-color: #f0f0f0;
+    padding: 10px;
+    border-right: 1px solid #ccc;
     display: flex;
     flex-direction: column;
-    padding: 10px;
-    background-color: #f0f0f0;
-    border-right: 1px solid #ccc;
-    width: 100px;
+    align-items: center;
+    overflow-y: auto; /* Scrollable sidebar */
 }
 
 #play-area {
-    flex-grow: 1;
+    flex: 1;
+    background-color: #ffffff;
     position: relative;
-    background-color: #fff;
     overflow: hidden;
+    touch-action: none; /* Prevent default touch actions */
 }
 
 .emoji {
-    font-size: 48px; /* This ensures all emojis are large enough */
-    cursor: grab;
+    font-size: 20px; /* Size for panel emojis */
+    cursor: pointer;
+    margin: 10px 0;
+    touch-action: none; /* Prevent touch actions on emojis */
+}
+
+.disabled {
+    color: #ccc;
+}
+
+.butterfly {
+    font-size: 15px; /* Smaller size for butterflies */
+    opacity: 0.7; /* Slightly transparent */
+}
+
+.tree {
+    font-size: 80px; /* Larger size for trees */
+}
+
+.bird {
+    font-size: 30px; /* Relative size for birds */
+}
+
+.worm {
+    font-size: 10px; /* Smaller size for worms */
 }
