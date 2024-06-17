@@ -18,6 +18,13 @@ document.addEventListener('DOMContentLoaded', () => {
             draggedEmoji = item.emoji;
         });
 
+        element.addEventListener('dragend', (e) => {
+            const x = e.clientX - playArea.offsetLeft;
+            const y = e.clientY - playArea.offsetTop;
+            addEmojiToPlayArea(draggedEmoji, x, y);
+            draggedEmoji = null;
+        });
+
         // Touch events
         element.addEventListener('touchstart', (e) => {
             e.preventDefault();
