@@ -1,18 +1,15 @@
-// birds.js
-
 function addBird(x, y) {
     const playArea = document.getElementById('play-area');
     const birdElement = document.createElement('div');
-    birdElement.textContent = '🐦'; // Use the bird emoji you prefer
+    birdElement.textContent = '🐦';
     birdElement.classList.add('emoji', 'bird');
     birdElement.style.position = 'absolute';
-    birdElement.style.left = `${getRandomEdgePosition('x')}px`;
-    birdElement.style.top = `${getRandomEdgePosition('y')}px`;
+    birdElement.style.left = getRandomEdgePosition('x') + 'px';
+    birdElement.style.top = getRandomEdgePosition('y') + 'px';
     playArea.appendChild(birdElement);
 
     birdElement.hunger = 100; // Initialize hunger bar
     moveBird(birdElement, x, y);
-    console.log("Bird added at", birdElement.style.left, birdElement.style.top);
 }
 
 function moveBird(bird, targetX, targetY) {
@@ -34,7 +31,6 @@ function moveBird(bird, targetX, targetY) {
         if (bird.hunger <= 60) {
             clearInterval(interval);
             birdLand(bird, targetX, targetY);
-            console.log("Bird hunger low, landing at", bird.style.left, bird.style.top);
         }
     }, 300); // Slower interval for smoother, less jerky movement
 }
@@ -43,11 +39,9 @@ function birdLand(bird, targetX, targetY) {
     bird.style.left = `${targetX}px`;
     bird.style.top = `${targetY}px`;
     bird.hunger = 100; // Reset hunger
-    console.log("Bird landed at", bird.style.left, bird.style.top);
 
     setTimeout(() => {
         moveBird(bird, targetX, targetY);
-        console.log("Bird taking off from", bird.style.left, bird.style.top);
     }, getRandomTime(5, 10) * 1000);
 }
 
